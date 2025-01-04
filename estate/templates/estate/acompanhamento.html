@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acompanhamento</title>
+</head>
+<body>
+    <h1>Tela de Acompanhamento</h1>
+        
+    <!-- Formulário -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <hr>
+
+    <!-- Tabela de dados -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Número</th>
+                <th>Data</th>
+                <th>Opção</th>
+                <th>Imagem</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dado in dados %}
+            <tr>
+                <td>{{ dado.nome }}</td>
+                <td>{{ dado.numero }}</td>
+                <td>{{ dado.data }}</td>
+                <td>{{ dado.opcao }}</td>
+                <td>
+                    {% if dado.imagem %}
+                        <img src="{{ dado.imagem.url }}" alt="Imagem" width="100">
+                    {% else %}
+                        Sem imagem
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'excluir_acompanhamento' dado.id %}" onclick="return confirm('Tem certeza que deseja excluir este registro?');">
+                        Excluir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
