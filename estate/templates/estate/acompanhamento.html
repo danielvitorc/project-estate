@@ -34,7 +34,7 @@
             <tr>
                 <td>{{ dado.nome }}</td>
                 <td>{{ dado.numero }}</td>
-                <td>{{ dado.data }}</td>
+                <td>{{ dado.data|date:"d/m/Y" }}</td>
                 <td>{{ dado.opcao }}</td>
                 <td>
                     {% if dado.imagem %}
@@ -52,5 +52,6 @@
             {% endfor %}
         </tbody>
     </table>
+    <a href="{% url 'home' %}">Home</a>
 </body>
 </html>
