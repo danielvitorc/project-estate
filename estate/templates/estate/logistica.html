@@ -3,10 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento</title>
+    <title>Estoque</title>
 </head>
 <body>
     <h1>Tela de Estoque</h1>
+        
+    <!-- Formulário -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_estoque.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <hr>
+
+    <!-- Tabela de dados -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Número</th>
+                <th>Data</th>
+                <th>Opção</th>
+                <th>Imagem</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dado_estoque in dados_estoque %}
+            <tr>
+                <td>{{ dado_estoque.nome }}</td>
+                <td>{{ dado_estoque.numero }}</td>
+                <td>{{ dado_estoque.data|date:"d/m/Y" }}</td>
+                <td>{{ dado_estoque.opcao }}</td>
+                <td>
+                    {% if dado_estoque.imagem %}
+                        <img src="{{ dado_estoque.imagem.url }}" alt="imagem" width="100">
+                    {% else %}
+                        Sem imagem
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'excluir_estoque' dado_estoque.id %}" onclick="return confirm('Tem certeza que deseja excluir este registro?');">
+                        Excluir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
     <a href="{% url 'home' %}">Home</a>
 </body>
-</html>

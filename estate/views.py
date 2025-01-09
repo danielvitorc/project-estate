@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Acompanhamento
-from .forms import AcompanhamentoForm
+from .models import Acompanhamento, Estoque
+from .forms import AcompanhamentoForm, EstoqueForm
 from django.shortcuts import get_object_or_404
 import os
 
@@ -62,7 +62,30 @@ def excluir_acompanhamento(request, pk):
 # ===== Renderiza a tela de Logistica se o login for bem sucedido ======
 @login_required
 def logistica(request):
-    return render(request, 'estate/logistica.html')
+    if request.method == 'POST':
+        form_estoque = EstoqueForm(request.POST, request.FILES)
+        if form_estoque.is_valid():
+            form_estoque.save()
+            return redirect('logistica')  # Redirecionar para evitar reenvio do formulário
+    else:
+        form_estoque = EstoqueForm()
+
+    dados_estoque = Estoque.objects.all()  # Obter todos os registros
+    return render(request, 'estate/logistica.html',{'form_estoque': form_estoque, 'dados_estoque': dados_estoque})
+
+#  ===== Função que exclui dados do formulário da tela de Acompanhamentos ====
+@login_required
+def excluir_estoque(request, pk):
+    dado_estoque = get_object_or_404(Estoque, pk=pk)
+    # Verifica se a imagem existe e exclui do sistema de arquivos
+    if dado_estoque.imagem:
+        imagem_path_estoque = os.path.join(settings.MEDIA_ROOT, str(dado_estoque.imagem))
+        if os.path.exists(imagem_path_estoque):
+            os.remove(imagem_path_estoque)
+    
+    # Deleta o registro do banco de dados
+    dado_estoque.delete()
+    return redirect('logistica')  # Redireciona para a página de acompanhamento
 
 
 
