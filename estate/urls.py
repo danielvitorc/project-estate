@@ -10,4 +10,6 @@ urlpatterns = [
     path('logistica/', views.logistica, name='logistica'),
     path('logistica/excluir/<int:pk>/', views.excluir_estoque, name='excluir_estoque'),
     path('cadastrar-usuario/', views.cadastrar_usuario, name='cadastrar_usuario'),
+    path('cadastrar_objeto/', views.cadastrar_objeto, name='cadastrar_objeto'),
+    path('excluir_objeto/<int:id>/', views.excluir_objeto, name='excluir_objeto'),
 ]

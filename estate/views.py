@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Acompanhamento, Estoque
-from .forms import AcompanhamentoForm, EstoqueForm
+from .models import Acompanhamento, Estoque, Objeto
+from .forms import AcompanhamentoForm, EstoqueForm, ObjetoForm
 from django.shortcuts import get_object_or_404
 import os
 
@@ -112,6 +112,26 @@ def cadastrar_usuario(request):
 
     return render(request, 'estate/cadastrar_usuario.html')
 
+
+# ===== Tela e função de cadastro de Objetos com restrição para os administradores ======
+@user_passes_test(is_admin)
+def cadastrar_objeto(request):
+    if request.method == 'POST':
+        form_objeto = ObjetoForm(request.POST)
+        if form_objeto.is_valid():
+            form_objeto.save()
+            
+            return redirect('cadastrar_objeto')  # Redireciona para a lista de objetos após cadastro
+    else:
+        form_objeto = ObjetoForm()
+
+    dados_objeto = Objeto.objects.all()  # Obter todos os registros
+    return render(request, 'estate/cadastrar_objeto.html', {'form_objeto': form_objeto, 'dados_objeto': dados_objeto})
+
+def excluir_objeto(request, id):
+    dado_objeto = get_object_or_404(Objeto, id=id)
+    dado_objeto.delete()
+    return redirect('cadastrar_objeto')  # Redireciona para a página de cadastro após excluir
 
 # ==== Função para deslogar do sistema =====
 def logout_usuario(request):

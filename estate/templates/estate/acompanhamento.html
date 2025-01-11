@@ -25,6 +25,7 @@
                 <th>Número</th>
                 <th>Data</th>
                 <th>Opção</th>
+                <th>Objeto</th>
                 <th>Imagem</th>
                 <th>Ações</th>
             </tr>
@@ -36,6 +37,7 @@
                 <td>{{ dado.numero }}</td>
                 <td>{{ dado.data|date:"d/m/Y" }}</td>
                 <td>{{ dado.opcao }}</td>
+                <td>{{ dado.objeto }}</td>
                 <td>
                     {% if dado.imagem %}
                         <img src="{{ dado.imagem.url }}" alt="Imagem" width="100">
